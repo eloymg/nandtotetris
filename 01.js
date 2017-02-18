@@ -1,28 +1,11 @@
-<html>
-<head>
-	<script>
-
-	a=[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-	b=[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-	c=[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]
-	d=[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]
-	e=[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]
-	f=[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]
-	g=[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]
-	h=[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]
-
-
-
-
-
-
-	var nand = function(a,b){
+var nand = function(a,b){
 		if(a==1 && b==1){
 			return 0;
 		}else{
 			return 1;
 		}
 	}
+
 	var not = function(a){
 		return nand(a,a);
 	}
@@ -115,16 +98,12 @@
     	o_mux2=mux16(c,d,sel[1]);
     	return mux16(o_mux1,o_mux2,sel[0]);
     }
-    var dmux4way16 = function(j,sel){
-    	if(j.length!=16){
-    		return undefined
-    	}
-    	res2 = [new Array(16),new Array(16),new Array(16),new Array(16)];
-    		res2[0]=dmux16(j,not(and(not(sel[0]),not(sel[1]))))[0]
-    		res2[1]=dmux16(j,and(not(sel[0]),sel[1]))[1]
-    		res2[2]=dmux16(j,not(and(sel[0],not(sel[1]))))[0]
-    		res2[3]=dmux16(j,and(sel[1],sel[0]))[1]
-    	
+    var dmux4way = function(j,sel){	
+    	res2 = new Array(4);
+    		res2[0]=dmux(j,not(and(not(sel[0]),not(sel[1]))))[0]
+    		res2[1]=dmux(j,and(not(sel[0]),sel[1]))[1]
+    		res2[2]=dmux(j,not(and(sel[0],not(sel[1]))))[0]
+    		res2[3]=dmux(j,and(sel[1],sel[0]))[1]  	
     	return res2
     }
     var mux8way16 = function(a,b,c,d,e,f,g,h,sel){	
@@ -132,17 +111,21 @@
     	o_mux16_2=mux4way16(e,f,g,h,sel.slice(1,3));
     	return mux16(o_mux16_1,o_mux16_2,sel[0]);
     }
-    
+    var dmux8way = function(j,sel){
+        
+        res2 = new Array(8).fill(0);
+        if(sel[0] == 0){
+            res2[0]=dmux(j,not(and(not(sel[1]),not(sel[2]))))[0]
+            res2[1]=dmux(j,and(not(sel[1]),sel[2]))[1]
+            res2[2]=dmux(j,not(and(sel[1],not(sel[2]))))[0]
+            res2[3]=dmux(j,and(sel[2],sel[1]))[1]
+        }
+        if(sel[0] == 1){
+            res2[4]=dmux(j,not(and(not(sel[1]),not(sel[2]))))[0]
+            res2[5]=dmux(j,and(not(sel[1]),sel[2]))[1]
+            res2[6]=dmux(j,not(and(sel[1],not(sel[2]))))[0]
+            res2[7]=dmux(j,and(sel[2],sel[1]))[1]
+        }
 
-
-
-
-
-
-	</script>
-	</head>
-	<body>
-	</body>
-
-
-</html>
+        return res2
+    }
